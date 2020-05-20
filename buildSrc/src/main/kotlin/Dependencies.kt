@@ -1,6 +1,6 @@
 @Suppress("unused")
 object Versions {
-    const val kotlin = "1.3.50" // Don't forget to update in buildSrc/build.gradle.kts too!
+    const val kotlin = "1.3.72" // Don't forget to update in buildSrc/build.gradle.kts too!
 }
 
 /**
