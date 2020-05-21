@@ -16,6 +16,7 @@ fun AndroidLibraryExtension.setDefaults() {
     sourceSets.getByName("main") {
         manifest.srcFile("src/androidMain/AndroidManifest.xml")
         res.srcDir("src/androidMain/res")
+        java.srcDir("src/androidMain/kotlin")
     }
     // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
     libraryVariants.all(Action {
