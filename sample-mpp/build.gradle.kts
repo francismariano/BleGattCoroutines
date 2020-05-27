@@ -49,6 +49,18 @@ android {
 }
 
 kotlin {
+
+    iosArm32("ios") {    // device
+        binaries {
+            framework()
+        }
+    }
+//    iosX64("ios") {     // simulator
+//        binaries {
+//            framework()
+//        }
+//    }
+
     android()
     sourceSets {
         all {
@@ -77,6 +89,28 @@ kotlin {
                 )
             }.forEach { api(it) }
             api(project(":genericaccess"))
+        }
+        getByName("iosMain").dependencies {
+            api(Libs.kotlinX.coroutines.coreNative)
+        }
+    }
+}
+
+tasks.register("copyFramework") {
+    val buildType = project.findProperty("kotlin.build.type") as? String ?: "DEBUG"
+    val target = project.findProperty("kotlin.target") ?: "ios"
+//    dependsOn (kotlin.targets."$target".binaries.getFramework(buildType).linkTask)
+    dependsOn("kotlin.targets.$target.binaries.getFramework(buildType).linkTask")
+
+    doLast {
+//        val srcFile = kotlin.targets."$target".binaries.getFramework(buildType).outputFile
+        val srcFile = (kotlin.targets["$target"] as org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget).binaries.getFramework(buildType).outputFile
+        val targetDir = project.property("configuration.build.dir")!!
+        copy {
+            from(srcFile.parent)
+            into(targetDir)
+            include("app.framework/**")
+            include("app.framework.dSYM")
         }
     }
 }
